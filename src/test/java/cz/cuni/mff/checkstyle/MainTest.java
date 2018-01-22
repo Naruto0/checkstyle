@@ -14,12 +14,12 @@ import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInA
 
 public class MainTest {
 
-    private List<String> runCheckstyleAndGetOutput(String path) throws IOException {
+    private List<String> runCheckstyleAndGetOutput(final String path) throws IOException {
         File tmp = File.createTempFile("prefix", "suffix");
 
-        Main.main(new String[] {path});
-
         System.setErr(new PrintStream(tmp));
+
+        Main.main(new String[] {path});
 
         return Files.readAllLines(Paths.get(tmp.toURI()));
     }
@@ -29,7 +29,7 @@ public class MainTest {
         List<String> output = runCheckstyleAndGetOutput(getClass().getClassLoader().getResource("wrongHeaderProject").getFile());
 
         assertEquals("Only one error expected", 1, output.size());
-        assertThat(output, containsInAnyOrder("src/MainClass.java: Wrong header"));
+        assertThat(output, containsInAnyOrder("src/MyClass.java: Wrong header"));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class MainTest {
         List<String> output = runCheckstyleAndGetOutput(getClass().getClassLoader().getResource("wrongNewlineAtEndProject").getFile());
 
         assertEquals("Only one error expected", 1, output.size());
-        assertThat(output, containsInAnyOrder("MainClass.java: does not contain newline at the end of file"));
+        assertThat(output, containsInAnyOrder("MyClass.java: does not contain newline at the end of file"));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class MainTest {
         List<String> output = runCheckstyleAndGetOutput(getClass().getClassLoader().getResource("wrongPackageFormatProject").getFile());
 
         assertEquals("Only one error expected", 1, output.size());
-        assertThat(output, containsInAnyOrder("MainClass.java: wrong package format"));
+        assertThat(output, containsInAnyOrder("MyClass.java: wrong package format"));
     }
 
     @Test
@@ -62,21 +62,22 @@ public class MainTest {
         List<String> output = runCheckstyleAndGetOutput(getClass().getClassLoader().getResource("wrongTabCharProject").getFile());
 
         assertEquals("Two errors expected", 2, output.size());
-        assertThat(output, containsInAnyOrder("MainClass.java: contains tab char at 2:0", "MainClass.java: contains tab char at 4:20"));
+        assertThat(output, containsInAnyOrder("MyClass.java: contains tab char at 2:0", "MyClass.java: contains tab char at 4:20"));
     }
 
     @Test
     public void checkDirsProjectTest() throws IOException {
         List<String> output = runCheckstyleAndGetOutput(getClass().getClassLoader().getResource("checkDirsProject").getFile());
 
-        assertEquals("6 errors expected", 6, output.size());
+        assertEquals("7 errors expected", 7, output.size());
         assertThat(output, containsInAnyOrder(
-                "src2/PigClass.java: Wrong header",
+                "src2/anotherDir/PigClass.java: Wrong header",
                 "src2/anotherDir/PigClass.java: wrong package format",
-                "src2/anotherDir/PigClass.java: 8 LineLength exceeded: actual length 152, maximum 120",
-                "src2/anotherDir/PigClass.java: contains tab char at 2:0",
-                "src2/anotherDir/PigClass.java: contains tab char at 2:1",
-                "src2/anotherDir/PigClass.java: does not contain newline at the end of file"
+                "src2/anotherDir/PigClass.java: 8 LineLength exceeded: actual length 151, maximum 120",
+                "src2/anotherDir/PigClass.java: contains tab char at 10:0",
+                "src2/anotherDir/PigClass.java: contains tab char at 10:1",
+                "src2/anotherDir/PigClass.java: does not contain newline at the end of file",
+                "src/VeryImportantClass.java: does not contain newline at the end of file"
         ));
     }
 

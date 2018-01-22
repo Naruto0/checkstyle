@@ -6,7 +6,7 @@ Napísať zjednodušenú verziu: <http://checkstyle.sourceforge.net>
 Úlohou checkstyle programu je kontrolovať správnu štruktúru a dodržovanie pravidiel čistého kódu.
 Často je checkstyle spúšťaný ešte pred kompiláciou projektu a pri nájdení chyby zastaví celý build proces.
 
-Implementáciu začnite písať do `main` metódy v `cz.cuni.mff.Main` triede. V `args` parametroch je cesta k projektu.
+Implementáciu začnite písať do `main` metódy v `cz.cuni.mff.checkstyle.Main` triede. V `args` parametroch bude cesta k projektu.
 Projekt obsahuje `checkstyle.config` súbor. Pokiaľ ho neobsahuje, tak program nič nevykoná. 
 
 Súbor `checkstyle.config` obsahuje zoznam kontrôl, ktoré sa majú vykonať. Pokiaľ sa nájde chyba, tak je potrebné ju 
@@ -14,6 +14,8 @@ vypísať do errorového výstupu (`System.err.println(...);`). Na poradí vypis
 
 Kontrolujú sa iba súbory s koncovkou `.java` a to rekurzívne (t.j. pokiaľ narazíte na adresár, tak začnete robiť 
 kontrolu aj v tomto adresári)
+
+Poznámka: Môžete predpokladať, že všetky súbory sa zmestia do pamäte.
 
 ### Formát `checkstyle.config` súboru
 
@@ -23,7 +25,6 @@ CheckHeader=header.txt
 LineLength=120
 TabChar
 NewlineAtEnd
-CheckDirs=src,test
 PackageFormat
 ```
 
@@ -79,13 +80,6 @@ Formát: `NewlineAtEnd`
 Error output: `{file}: does not contain newline at the end of file`, kde
 * `{file}` reprezentuje relatívnu cestu k súboru od adresára projektu
 
-#### CheckDirs
-Špecifikuje cesty k adresárom, v ktorých sa majú súbory kontrolovať. Tieto cesty sú relatívne k root adresáru projektu.
-Súbory, ktoré sa v týchto adresároch nenachádzajú budú ignorované.
-
-Formát: `CheckDirs={dirs}`, kde
-* `{dirs}` je zoznam adresárov oddelených `,`
-
 #### PackageFormat
 Definuje, že package by mal mať formát `^[a-z]+(\.[a-zA-Z_][a-zA-Z0-9_]*)*$` regulárneho výrazu. 
 Môžete predpokladať, že len jeden riadok začína slovom `package` a v súboroch sa nevyskytujú časti kódu podobného typu:
@@ -102,7 +96,7 @@ Error output: `{file}: wrong package format`, kde
 
 ### Testovanie
 
-V termináli choďte do root adresára projektu (pomocou príkazov `cd`), potom spustite príkaz `mvn clear test`.
+V termináli choďte do root adresára projektu (pomocou príkazov `cd`), potom spustite príkaz `mvn clean test`.
 
 Pokiaľ všetky testy prejdú, tak ma zavolajte.
 
