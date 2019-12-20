@@ -7,6 +7,8 @@ public class ProjectBufferedReader {
         try (FileReader fr = new FileReader(file);
              BufferedReader br = new BufferedReader(fr)) {
 
+            return br;
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

@@ -5,9 +5,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class MainTest {
     }
 
     @Test
-    public void wrongTabCharProjectTest() throws IOException, URISyntaxException {
+    public void wrongTabCharProjectTest() throws IOException {
         List<String> output = runCheckstyleAndGetOutput((new File (getClass().getClassLoader().getResource("wrongTabCharProject").getFile()).toPath()).toString());
 
         assertEquals("Two errors expected", 2, output.size());
